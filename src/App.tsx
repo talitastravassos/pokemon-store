@@ -1,7 +1,18 @@
 import React from "react";
 import "./App.scss";
+import { PokemonContext } from "./context/PokemonContext";
 
 function App() {
+  const {
+    // action: { getPokemons },
+    state: { pokemonList },
+  } = React.useContext(PokemonContext); // context api
+
+  React.useEffect(() => {
+    console.log(pokemonList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pokemonList]);
+
   return (
     <div className="App">
       <header className="App-header">

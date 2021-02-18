@@ -1,11 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
+import PokemonProvider from "./context/PokemonContext";
 import "./index.scss";
 
+const client = new QueryClient();
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <QueryClientProvider client={client}>
+    <PokemonProvider>
+      <App />
+    </PokemonProvider>
+  </QueryClientProvider>,
   document.getElementById("root")
 );
