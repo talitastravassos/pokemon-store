@@ -1,15 +1,17 @@
 import axios from "axios";
 import React from "react";
-import { initialPokemon, Pokemon } from "../types/pokemon.types";
+import { Pokemon } from "../types/pokemon.types";
 
 interface State {
   pokemonList: Pokemon[];
+  isLoading: boolean;
+  nextPage: string;
 }
 
 interface IContext {
   state: State;
   action: {
-    getPokemons(): void;
+    getPokemons(url: string): void;
   };
 }
 
@@ -22,22 +24,30 @@ export default class PokemonProvider extends React.Component<{}, State> {
     super(props);
 
     this.state = {
-      pokemonList: [initialPokemon],
+      pokemonList: [] as Pokemon[],
+      isLoading: false,
+      nextPage: "",
     };
   }
 
-  getPokemons = async () => {
+  getPokemons = async (url: string) => {
+    this.setState({ isLoading: true });
     try {
-      const response = await axios.get(URL_API);
+      const response = await axios.get(url);
       console.log(response);
-      this.setState({ pokemonList: response.data.results });
+      this.setState({
+        ...this.state,
+        pokemonList: [...this.state.pokemonList, ...response.data.results],
+        nextPage: response.data.next,
+      });
+      this.setState({ isLoading: false });
     } catch (error) {
       console.error(error);
     }
   };
 
   componentDidMount() {
-    this.getPokemons();
+    this.getPokemons(URL_API);
   }
 
   render() {
