@@ -3,7 +3,8 @@ import Grid from "@material-ui/core/Grid";
 import React from "react";
 import "./App.scss";
 import { ReloadButtonWrapper, Wrapper } from "./App.styles";
-import { Navbar } from "./components/Navbar";
+import Cart from "./components/Cart";
+import Navbar from "./components/Navbar";
 import PokemonItem from "./components/PokemonItem";
 import { PokemonContext } from "./context/PokemonContext";
 import { Pokemon } from "./types/pokemon.types";
@@ -39,7 +40,18 @@ function App() {
     });
   };
 
-  // const handleRemoveF
+  const handleRemoveFromCart = (url: string) => {
+    setCartItems((prev) =>
+      prev.reduce((ack, item) => {
+        if (item.url === url) {
+          if (item.amount === 1) return ack;
+          return [...ack, { ...item, amount: item.amount - 1 }];
+        } else {
+          return [...ack, item];
+        }
+      }, [] as Pokemon[])
+    );
+  };
 
   return (
     <>
@@ -50,12 +62,11 @@ function App() {
           open={cartOpen}
           onClose={() => setCartOpen(false)}
         >
-          Cart goes here
-          {/* <Cart
-          cartItems={cartItems}
-          addToCart={handleAddToCart}
-          removeFromCart={handleRemoveFromCart}
-        /> */}
+          <Cart
+            cartItems={cartItems}
+            addToCart={handleAddToCart}
+            removeFromCart={handleRemoveFromCart}
+          />
         </Drawer>
 
         <Grid container spacing={3}>

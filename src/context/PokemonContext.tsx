@@ -35,15 +35,33 @@ export default class PokemonProvider extends React.Component<{}, State> {
     try {
       const response = await axios.get(url);
       console.log(response);
+
+      const data = response.data.results.map((item: Pokemon) => {
+        item.image = this.getImage(item.url);
+        item.price = Number((Math.random() * 100).toFixed(2));
+
+        return item;
+      });
+
       this.setState({
         ...this.state,
-        pokemonList: [...this.state.pokemonList, ...response.data.results],
+        pokemonList: [...this.state.pokemonList, ...data],
         nextPage: response.data.next,
       });
       this.setState({ isLoading: false });
     } catch (error) {
       console.error(error);
     }
+  };
+
+  getImage = (link: string) => {
+    const url = "https://www.serebii.net/art/th/";
+
+    const id = link
+      .substring(0, link.length - 1)
+      .slice(link.substring(0, link.length - 1).lastIndexOf("/") + 1);
+
+    return url + id + ".png";
   };
 
   componentDidMount() {

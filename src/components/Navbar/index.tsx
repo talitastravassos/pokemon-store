@@ -11,7 +11,7 @@ type Props = {
   setCartOpen: (cartOpen: boolean) => void;
 };
 
-export const Navbar: React.FC<Props> = ({ cartItems, setCartOpen }) => {
+const Navbar: React.FC<Props> = ({ cartItems, setCartOpen }) => {
   const getTotalItems = (items: Pokemon[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
 
@@ -25,3 +25,5 @@ export const Navbar: React.FC<Props> = ({ cartItems, setCartOpen }) => {
     </Wrapper>
   );
 };
+
+export default Navbar;
