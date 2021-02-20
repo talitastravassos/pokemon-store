@@ -13,14 +13,15 @@ export const CartButton = styled(IconButton)`
   align-self: flex-end;
 `;
 
-export const ReloadButtonWrapper = styled.div`
+export const CenterButtonWrapper = styled.div`
   margin: 4rem;
   text-align: center;
 
   button {
-    background-color: #e40017;
+    background-color: #e40017 !important;
+    color: #fff !important;
     border: none;
-    border-radius: 2rem;
+    border-radius: 0.5rem;
     color: white;
     padding: 15px 32px;
     text-align: center;

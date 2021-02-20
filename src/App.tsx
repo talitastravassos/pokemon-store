@@ -1,8 +1,9 @@
+import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
 import "./App.scss";
-import { ReloadButtonWrapper, Wrapper } from "./App.styles";
+import { CenterButtonWrapper, Wrapper } from "./App.styles";
 import Cart from "./components/Cart";
 import Navbar from "./components/Navbar";
 import PokemonItem from "./components/PokemonItem";
@@ -77,9 +78,11 @@ function App() {
           ))}
         </Grid>
 
-        <ReloadButtonWrapper>
-          <button onClick={() => getPokemons(nextPage)}>Mais Pokemón</button>
-        </ReloadButtonWrapper>
+        <CenterButtonWrapper>
+          <Button onClick={() => getPokemons(nextPage)} color="secondary">
+            Mais Pokémon
+          </Button>
+        </CenterButtonWrapper>
       </Wrapper>
     </>
   );

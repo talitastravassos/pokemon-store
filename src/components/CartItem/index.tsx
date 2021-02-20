@@ -1,6 +1,5 @@
-import Button from "@material-ui/core/Button";
 import { Pokemon } from "../../types/pokemon.types";
-import { Wrapper } from "./styles";
+import { CartButtonWrapper, Wrapper } from "./styles";
 
 type Props = {
   item: Pokemon;
@@ -19,23 +18,11 @@ const CartItem: React.FC<Props> = ({ item, addToCart, removeFromCart }) => (
         <p>Total: R$ {(item.amount * item.price).toFixed(2)}</p>
       </div>
       <div className="buttons">
-        <Button
-          size="small"
-          disableElevation
-          variant="contained"
-          onClick={() => removeFromCart(item.url)}
-        >
+        <CartButtonWrapper onClick={() => removeFromCart(item.url)}>
           -
-        </Button>
+        </CartButtonWrapper>
         <p>{item.amount}</p>
-        <Button
-          size="small"
-          disableElevation
-          variant="contained"
-          onClick={() => addToCart(item)}
-        >
-          +
-        </Button>
+        <CartButtonWrapper onClick={() => addToCart(item)}>+</CartButtonWrapper>
       </div>
     </div>
   </Wrapper>

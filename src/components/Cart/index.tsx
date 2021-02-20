@@ -1,3 +1,6 @@
+import Button from "@material-ui/core/Button";
+import React from "react";
+import { CenterButtonWrapper } from "../../App.styles";
 import { Pokemon } from "../../types/pokemon.types";
 import CartItem from "../CartItem";
 import { Wrapper } from "./styles";
@@ -12,6 +15,14 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
   const calculateTotal = (items: Pokemon[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
+  React.useEffect(() => {
+    console.log({ cartItems });
+  }, [cartItems]);
+
+  const checkout = (cartItems: Pokemon[]) => {
+    console.log({ cartItems });
+  };
+
   return (
     <Wrapper>
       <h2>Seu carrinho</h2>
@@ -25,6 +36,14 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
         />
       ))}
       <h2>Total: R$ {calculateTotal(cartItems).toFixed(2)}</h2>
+
+      {cartItems.length === 0 ? null : (
+        <CenterButtonWrapper>
+          <Button onClick={() => checkout(cartItems)} color="secondary">
+            Finalizar compra
+          </Button>
+        </CenterButtonWrapper>
+      )}
     </Wrapper>
   );
 };

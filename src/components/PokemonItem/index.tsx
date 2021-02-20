@@ -15,7 +15,7 @@ const PokemonItem: React.FC<Props> = ({ item, handleAddToCart }) => {
         <h3>{item.name}</h3>
         <p>R$ {item.price}</p>
       </div>
-      <Button onClick={() => handleAddToCart(item)}>
+      <Button onClick={() => handleAddToCart(item)} color="secondary">
         Adicionar ao carrinho
       </Button>
     </Wrapper>
