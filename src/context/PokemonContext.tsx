@@ -12,7 +12,7 @@ interface State {
 interface IContext {
   state: State;
   action: {
-    getPokemons(url: string): void;
+    getPokemons(url: string, name?: string): void;
     addToCart(clickedItem: Pokemon): void;
     RemoveFromCart(url: string): void;
     setCartItemsOnLocalStorage(cartItems: Pokemon[]): void;
@@ -22,7 +22,7 @@ interface IContext {
   };
 }
 
-const URL_API = "https://pokeapi.co/api/v2/pokemon/";
+export const URL_API = "https://pokeapi.co/api/v2/pokemon/";
 
 export const PokemonContext = React.createContext({} as IContext);
 
@@ -38,22 +38,34 @@ export default class PokemonProvider extends React.Component<{}, State> {
     };
   }
 
-  getPokemons = async (url: string) => {
+  getPokemons = async (url: string = URL_API, name?: string) => {
+    let data: Pokemon[];
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(name ? url + name : url);
       console.log(response);
 
-      const data = response.data.results.map((item: Pokemon) => {
-        item.image = this.getImage(item.url);
-        item.price = Number((Math.random() * 100).toFixed(2));
+      if (!name) {
+        data = response.data.results.map((item: Pokemon) => {
+          item.image = this.getImage(item.url);
+          item.price = Number((Math.random() * 100).toFixed(2));
 
-        return item;
-      });
+          return item;
+        });
+      } else {
+        data = [
+          {
+            name: response.data.name,
+            url: url + name,
+            image: this.getImage(URL_API + response.data.id + "/"),
+            price: Number((Math.random() * 100).toFixed(2)),
+          },
+        ] as Pokemon[];
+      }
 
       this.setState({
         ...this.state,
-        pokemonList: [...this.state.pokemonList, ...data],
-        nextPage: response.data.next,
+        pokemonList: !name ? [...this.state.pokemonList, ...data] : data,
+        nextPage: response.data.next ? response.data.next : this.state.nextPage,
       });
     } catch (error) {
       console.error(error);

@@ -21,10 +21,7 @@ function App() {
     state: { pokemonList, nextPage, cartItems, cartOpen },
   } = React.useContext(PokemonContext);
 
-  // const [cartOpen, setCartOpen] = React.useState(false);
-
   React.useEffect(() => {
-    // console.log(pokemonList);
     setCartItemsOnLocalStorage(cartItems);
   }, [cartItems, setCartItemsOnLocalStorage]);
 

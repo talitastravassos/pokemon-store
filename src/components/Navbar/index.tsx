@@ -2,9 +2,9 @@ import Badge from "@material-ui/core/Badge";
 import { grey } from "@material-ui/core/colors";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import React from "react";
-import { CartButton } from "../../App.styles";
 import { Pokemon } from "../../types/pokemon.types";
-import { Wrapper } from "./styles";
+import Search from "../Search";
+import { CartButton, Wrapper } from "./styles";
 
 type Props = {
   cartItems: Pokemon[];
@@ -17,6 +17,7 @@ const Navbar: React.FC<Props> = ({ cartItems, setCartOpen }) => {
 
   return (
     <Wrapper>
+      <Search />
       <CartButton onClick={() => setCartOpen(true)}>
         <Badge badgeContent={getTotalItems(cartItems)} color="error">
           <AddShoppingCartIcon style={{ color: grey[300] }} />
