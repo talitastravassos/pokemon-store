@@ -1,10 +1,11 @@
 import axios from "axios";
 import React from "react";
+import { modalNotification } from "../services/notifications";
 import { Pokemon } from "../types/pokemon.types";
-
 interface State {
   pokemonList: Pokemon[];
-  isLoading: boolean;
+  cartItems: Pokemon[];
+  cartOpen: boolean;
   nextPage: string;
 }
 
@@ -12,6 +13,12 @@ interface IContext {
   state: State;
   action: {
     getPokemons(url: string): void;
+    addToCart(clickedItem: Pokemon): void;
+    RemoveFromCart(url: string): void;
+    setCartItemsOnLocalStorage(cartItems: Pokemon[]): void;
+    getCartItemsFromLocalStorage(): void;
+    checkout(total: number): void;
+    openCloseCart(isOpen: boolean): void;
   };
 }
 
@@ -25,13 +32,13 @@ export default class PokemonProvider extends React.Component<{}, State> {
 
     this.state = {
       pokemonList: [] as Pokemon[],
-      isLoading: false,
+      cartItems: [] as Pokemon[],
+      cartOpen: false,
       nextPage: "",
     };
   }
 
   getPokemons = async (url: string) => {
-    this.setState({ isLoading: true });
     try {
       const response = await axios.get(url);
       console.log(response);
@@ -48,11 +55,74 @@ export default class PokemonProvider extends React.Component<{}, State> {
         pokemonList: [...this.state.pokemonList, ...data],
         nextPage: response.data.next,
       });
-      this.setState({ isLoading: false });
     } catch (error) {
       console.error(error);
     }
   };
+
+  addToCart = (clickedItem: Pokemon) => {
+    this.setState((state) => {
+      const isItemInCart = state.cartItems.find(
+        (item) => item.url === clickedItem.url
+      );
+
+      if (isItemInCart) {
+        return {
+          ...state,
+          cartItems: state.cartItems.map((item) =>
+            item.url === clickedItem.url
+              ? { ...item, amount: item.amount + 1 }
+              : item
+          ),
+        };
+      }
+
+      return {
+        ...state,
+        cartItems: [...state.cartItems, { ...clickedItem, amount: 1 }],
+      };
+    });
+  };
+
+  RemoveFromCart = (url: string) => {
+    this.setState((state) => {
+      return {
+        ...state,
+        cartItems: state.cartItems.reduce((ack, item) => {
+          if (item.url === url) {
+            if (item.amount === 1) return ack;
+            return [...ack, { ...item, amount: item.amount - 1 }];
+          } else {
+            return [...ack, item];
+          }
+        }, [] as Pokemon[]),
+      };
+    });
+  };
+
+  setCartItemsOnLocalStorage = (cartItems: Pokemon[]) => {
+    localStorage.setItem("currentCart", JSON.stringify(cartItems));
+  };
+
+  getCartItemsFromLocalStorage = () => {
+    const items = localStorage.getItem("currentCart");
+
+    this.setState({
+      cartItems: items ? JSON.parse(items) : ([] as Pokemon[]),
+    });
+  };
+
+  checkout = (total: number) => {
+    localStorage.removeItem("currentCart");
+    this.getCartItemsFromLocalStorage();
+    this.openCloseCart(false);
+    modalNotification(
+      `Obrigado por finalizar a sua compra no valor de R$ ${total.toFixed(2)}!`,
+      "success"
+    );
+  };
+
+  openCloseCart = (isOpen: boolean) => this.setState({ cartOpen: isOpen });
 
   getImage = (link: string) => {
     const url = "https://www.serebii.net/art/th/";
@@ -73,6 +143,12 @@ export default class PokemonProvider extends React.Component<{}, State> {
       state: { ...this.state },
       action: {
         getPokemons: this.getPokemons,
+        addToCart: this.addToCart,
+        RemoveFromCart: this.RemoveFromCart,
+        setCartItemsOnLocalStorage: this.setCartItemsOnLocalStorage,
+        getCartItemsFromLocalStorage: this.getCartItemsFromLocalStorage,
+        checkout: this.checkout,
+        openCloseCart: this.openCloseCart,
       },
     };
 

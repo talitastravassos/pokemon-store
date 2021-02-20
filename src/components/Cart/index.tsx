@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import React from "react";
 import { CenterButtonWrapper } from "../../App.styles";
+import { PokemonContext } from "../../context/PokemonContext";
 import { Pokemon } from "../../types/pokemon.types";
 import CartItem from "../CartItem";
 import { Wrapper } from "./styles";
@@ -12,16 +13,17 @@ type Props = {
 };
 
 const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
+  const {
+    action: { checkout },
+    // state: { pokemonList, nextPage },
+  } = React.useContext(PokemonContext);
+
   const calculateTotal = (items: Pokemon[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
   React.useEffect(() => {
     console.log({ cartItems });
   }, [cartItems]);
-
-  const checkout = (cartItems: Pokemon[]) => {
-    console.log({ cartItems });
-  };
 
   return (
     <Wrapper>
@@ -39,7 +41,10 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
 
       {cartItems.length === 0 ? null : (
         <CenterButtonWrapper>
-          <Button onClick={() => checkout(cartItems)} color="secondary">
+          <Button
+            onClick={() => checkout(calculateTotal(cartItems))}
+            color="secondary"
+          >
             Finalizar compra
           </Button>
         </CenterButtonWrapper>

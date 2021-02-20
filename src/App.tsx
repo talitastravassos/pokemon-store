@@ -8,72 +8,46 @@ import Cart from "./components/Cart";
 import Navbar from "./components/Navbar";
 import PokemonItem from "./components/PokemonItem";
 import { PokemonContext } from "./context/PokemonContext";
-import { Pokemon } from "./types/pokemon.types";
 
 function App() {
   const {
-    action: { getPokemons },
-    state: { pokemonList, nextPage },
+    action: {
+      getPokemons,
+      setCartItemsOnLocalStorage,
+      addToCart,
+      RemoveFromCart,
+      openCloseCart,
+    },
+    state: { pokemonList, nextPage, cartItems, cartOpen },
   } = React.useContext(PokemonContext);
 
-  const [cartOpen, setCartOpen] = React.useState(false);
-  const [cartItems, setCartItems] = React.useState([] as Pokemon[]);
+  // const [cartOpen, setCartOpen] = React.useState(false);
 
   React.useEffect(() => {
-    console.log(pokemonList);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pokemonList]);
-
-  const handleAddToCart = (clickedItem: Pokemon) => {
-    setCartItems((prev) => {
-      // 1. Is the item already added in the cart?
-      const isItemInCart = prev.find((item) => item.url === clickedItem.url);
-
-      if (isItemInCart) {
-        return prev.map((item) =>
-          item.url === clickedItem.url
-            ? { ...item, amount: item.amount + 1 }
-            : item
-        );
-      }
-      // First time the item is added
-      return [...prev, { ...clickedItem, amount: 1 }];
-    });
-  };
-
-  const handleRemoveFromCart = (url: string) => {
-    setCartItems((prev) =>
-      prev.reduce((ack, item) => {
-        if (item.url === url) {
-          if (item.amount === 1) return ack;
-          return [...ack, { ...item, amount: item.amount - 1 }];
-        } else {
-          return [...ack, item];
-        }
-      }, [] as Pokemon[])
-    );
-  };
+    // console.log(pokemonList);
+    setCartItemsOnLocalStorage(cartItems);
+  }, [cartItems, setCartItemsOnLocalStorage]);
 
   return (
     <>
-      <Navbar cartItems={cartItems} setCartOpen={setCartOpen} />
+      <Navbar cartItems={cartItems} setCartOpen={openCloseCart} />
       <Wrapper>
         <Drawer
           anchor="right"
           open={cartOpen}
-          onClose={() => setCartOpen(false)}
+          onClose={() => openCloseCart(false)}
         >
           <Cart
             cartItems={cartItems}
-            addToCart={handleAddToCart}
-            removeFromCart={handleRemoveFromCart}
+            addToCart={addToCart}
+            removeFromCart={RemoveFromCart}
           />
         </Drawer>
 
         <Grid container spacing={3}>
           {pokemonList?.map((item, index) => (
             <Grid item key={index} xs={12} sm={4}>
-              <PokemonItem item={item} handleAddToCart={handleAddToCart} />
+              <PokemonItem item={item} handleAddToCart={addToCart} />
             </Grid>
           ))}
         </Grid>

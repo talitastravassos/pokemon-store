@@ -5,9 +5,3 @@ export interface Pokemon {
   price: number;
   image: string;
 }
-
-export const initialPokemon = {
-  name: "",
-  url: "",
-  amount: 0,
-};
