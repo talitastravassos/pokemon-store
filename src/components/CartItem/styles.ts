@@ -26,7 +26,7 @@ export const Wrapper = styled.div`
 `;
 
 export const CartButtonWrapper = styled(Button)`
-  background-color: #e40017 !important;
+  background-color: ${(props) => props.theme.colors.primary} !important;
   color: #fff !important;
   border: none;
   border-radius: 0.5rem;
@@ -36,6 +36,6 @@ export const CartButtonWrapper = styled(Button)`
   font-size: 16px;
 
   &:hover {
-    background-color: #a9294f;
+    background-color: ${(props) => props.theme.colors.secundary};
   }
 `;

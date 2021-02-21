@@ -18,7 +18,7 @@ export const CenterButtonWrapper = styled.div`
   text-align: center;
 
   button {
-    background-color: #e40017 !important;
+    background-color: ${(props) => props.theme.colors.primary} !important;
     color: #fff !important;
     border: none;
     border-radius: 0.5rem;
@@ -31,7 +31,7 @@ export const CenterButtonWrapper = styled.div`
     margin: 0 auto;
 
     &:hover {
-      background-color: #a9294f;
+      background-color: ${(props) => props.theme.colors.secundary};
     }
   }
 `;
