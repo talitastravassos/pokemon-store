@@ -13,8 +13,6 @@ import blue from "./styles/themes/blue";
 import red from "./styles/themes/red";
 
 function App() {
-  const [theme, setTheme] = React.useState(blue);
-
   const {
     action: {
       getPokemons,
@@ -22,13 +20,13 @@ function App() {
       addToCart,
       RemoveFromCart,
       openCloseCart,
+      setThemeOnLocalStorage,
     },
-    state: { pokemonList, nextPage, cartItems, cartOpen },
+    state: { pokemonList, nextPage, cartItems, cartOpen, theme },
   } = React.useContext(PokemonStoreContext);
 
-  const toggleTheme = () => {
-    setTheme(theme.title === "blue" ? red : blue);
-  };
+  const toggleTheme = () =>
+    setThemeOnLocalStorage(theme.title === "blue" ? red : blue);
 
   React.useEffect(() => {
     setCartItemsOnLocalStorage(cartItems);

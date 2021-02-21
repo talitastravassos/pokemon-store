@@ -1,12 +1,15 @@
 import axios from "axios";
 import React from "react";
+import { DefaultTheme } from "styled-components";
 import { modalNotification } from "../services/notifications";
+import blue from "../styles/themes/blue";
 import { Pokemon } from "../types/pokemon.types";
 interface State {
   pokemonList: Pokemon[];
   cartItems: Pokemon[];
   cartOpen: boolean;
   nextPage: string;
+  theme: DefaultTheme;
 }
 
 interface IContext {
@@ -19,6 +22,8 @@ interface IContext {
     getCartItemsFromLocalStorage(): void;
     checkout(total: number): void;
     openCloseCart(isOpen: boolean): void;
+    setThemeOnLocalStorage(theme: DefaultTheme): void;
+    getThemeFromLocalStorage(): DefaultTheme;
   };
 }
 
@@ -35,6 +40,7 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
       cartItems: [] as Pokemon[],
       cartOpen: false,
       nextPage: "",
+      theme: this.getThemeFromLocalStorage(),
     };
   }
 
@@ -124,6 +130,17 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
     });
   };
 
+  setThemeOnLocalStorage = (theme: DefaultTheme) => {
+    localStorage.setItem("currentTheme", JSON.stringify(theme));
+    this.setState({ theme });
+  };
+
+  getThemeFromLocalStorage = (): DefaultTheme => {
+    const theme = localStorage.getItem("currentTheme");
+
+    return theme ? JSON.parse(theme) : blue;
+  };
+
   checkout = (total: number) => {
     localStorage.removeItem("currentCart");
     this.getCartItemsFromLocalStorage();
@@ -148,6 +165,7 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
 
   componentDidMount() {
     this.getPokemons(URL_API);
+    this.getCartItemsFromLocalStorage();
   }
 
   render() {
@@ -161,6 +179,8 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
         getCartItemsFromLocalStorage: this.getCartItemsFromLocalStorage,
         checkout: this.checkout,
         openCloseCart: this.openCloseCart,
+        setThemeOnLocalStorage: this.setThemeOnLocalStorage,
+        getThemeFromLocalStorage: this.getThemeFromLocalStorage,
       },
     };
 
