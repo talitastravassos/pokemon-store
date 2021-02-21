@@ -24,9 +24,9 @@ interface IContext {
 
 export const URL_API = "https://pokeapi.co/api/v2/pokemon/";
 
-export const PokemonContext = React.createContext({} as IContext);
+export const PokemonStoreContext = React.createContext({} as IContext);
 
-export default class PokemonProvider extends React.Component<{}, State> {
+export default class PokemonStoreProvider extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
 
@@ -164,6 +164,6 @@ export default class PokemonProvider extends React.Component<{}, State> {
       },
     };
 
-    return <PokemonContext.Provider value={value} {...this.props} />;
+    return <PokemonStoreContext.Provider value={value} {...this.props} />;
   }
 }

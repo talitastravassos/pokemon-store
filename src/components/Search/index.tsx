@@ -1,11 +1,14 @@
 import React from "react";
-import { PokemonContext, URL_API } from "../../context/PokemonContext";
+import {
+  PokemonStoreContext,
+  URL_API,
+} from "../../context/PokemonStoreContext";
 import { Input, SearchButton, Wrapper } from "./styles";
 
 const Search: React.FC = () => {
   const {
     action: { getPokemons },
-  } = React.useContext(PokemonContext);
+  } = React.useContext(PokemonStoreContext);
 
   const [state, setState] = React.useState("");
 

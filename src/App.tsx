@@ -7,7 +7,7 @@ import { CenterButtonWrapper, Wrapper } from "./App.styles";
 import Cart from "./components/Cart";
 import Navbar from "./components/Navbar";
 import PokemonItem from "./components/PokemonItem";
-import { PokemonContext } from "./context/PokemonContext";
+import { PokemonStoreContext } from "./context/PokemonStoreContext";
 
 function App() {
   const {
@@ -19,7 +19,7 @@ function App() {
       openCloseCart,
     },
     state: { pokemonList, nextPage, cartItems, cartOpen },
-  } = React.useContext(PokemonContext);
+  } = React.useContext(PokemonStoreContext);
 
   React.useEffect(() => {
     setCartItemsOnLocalStorage(cartItems);

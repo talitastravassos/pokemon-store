@@ -1,7 +1,7 @@
 import Button from "@material-ui/core/Button";
 import React from "react";
 import { CenterButtonWrapper } from "../../App.styles";
-import { PokemonContext } from "../../context/PokemonContext";
+import { PokemonStoreContext } from "../../context/PokemonStoreContext";
 import { Pokemon } from "../../types/pokemon.types";
 import CartItem from "../CartItem";
 import { Wrapper } from "./styles";
@@ -16,7 +16,7 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
   const {
     action: { checkout },
     // state: { pokemonList, nextPage },
-  } = React.useContext(PokemonContext);
+  } = React.useContext(PokemonStoreContext);
 
   const calculateTotal = (items: Pokemon[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
