@@ -24,7 +24,7 @@ const Search: React.FC = () => {
       <Input value={state} onChange={handleChange} />
       <SearchButton
         variant="contained"
-        onClick={() => getPokemons(URL_API, state)}
+        onClick={() => getPokemons(URL_API, undefined, state)}
       >
         Pesquisar
       </SearchButton>

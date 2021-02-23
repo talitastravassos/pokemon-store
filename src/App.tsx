@@ -1,9 +1,9 @@
-import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
+import { ClipLoader } from "react-spinners";
 import { ThemeProvider } from "styled-components";
-import { CenterButtonWrapper, Wrapper } from "./App.styles";
+import { Wrapper } from "./App.styles";
 import Cart from "./components/Cart";
 import { Header } from "./components/Header";
 import PokemonItem from "./components/PokemonItem";
@@ -12,17 +12,16 @@ import GlobalStyle from "./styles/global";
 import blue from "./styles/themes/blue";
 import red from "./styles/themes/red";
 
-function App() {
+const App: React.FC = () => {
   const {
     action: {
-      getPokemons,
       setCartItemsOnLocalStorage,
       addToCart,
       RemoveFromCart,
       openCloseCart,
       setThemeOnLocalStorage,
     },
-    state: { pokemonList, nextPage, cartItems, cartOpen, theme },
+    state: { pokemonList, cartItems, cartOpen, theme, isLoading },
   } = React.useContext(PokemonStoreContext);
 
   const toggleTheme = () =>
@@ -55,22 +54,22 @@ function App() {
           />
         </Drawer>
 
-        <Grid container spacing={3}>
-          {pokemonList?.map((item, index) => (
-            <Grid item key={index} xs={12} sm={4}>
-              <PokemonItem item={item} handleAddToCart={addToCart} />
-            </Grid>
-          ))}
+        <Grid container spacing={3} justify={"center"}>
+          <ClipLoader
+            color={theme.colors.primary}
+            loading={isLoading}
+            size={150}
+          />
+          {!isLoading &&
+            pokemonList?.map((item, index) => (
+              <Grid item key={index} xs={12} sm={4}>
+                <PokemonItem item={item} handleAddToCart={addToCart} />
+              </Grid>
+            ))}
         </Grid>
-
-        <CenterButtonWrapper>
-          <Button onClick={() => getPokemons(nextPage)} color="secondary">
-            Mais Pokémon
-          </Button>
-        </CenterButtonWrapper>
       </Wrapper>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

@@ -35,3 +35,10 @@ export const CenterButtonWrapper = styled.div`
     }
   }
 `;
+
+export const Loader = styled.div`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+  /* text-align: center; */
+`;

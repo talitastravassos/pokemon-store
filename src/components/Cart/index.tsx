@@ -15,15 +15,14 @@ type Props = {
 const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
   const {
     action: { checkout },
-    // state: { pokemonList, nextPage },
   } = React.useContext(PokemonStoreContext);
 
   const calculateTotal = (items: Pokemon[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
-  React.useEffect(() => {
-    console.log({ cartItems });
-  }, [cartItems]);
+  // React.useEffect(() => {
+  //   console.log({ cartItems });
+  // }, [cartItems]);
 
   return (
     <Wrapper>

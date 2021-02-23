@@ -4,9 +4,12 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   display: flex;
   text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
   border-bottom: 1px solid lightblue;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
+  padding: 1rem 0;
+  h3 {
+    padding: 1rem 0;
+  }
   div {
     flex: 1;
   }
@@ -14,6 +17,7 @@ export const Wrapper = styled.div`
   .buttons {
     display: flex;
     justify-content: space-between;
+    margin: 1rem 0;
   }
   img {
     object-fit: contain;

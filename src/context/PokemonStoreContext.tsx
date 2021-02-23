@@ -8,14 +8,15 @@ interface State {
   pokemonList: Pokemon[];
   cartItems: Pokemon[];
   cartOpen: boolean;
-  nextPage: string;
   theme: DefaultTheme;
+  type: string;
+  isLoading: boolean;
 }
 
 interface IContext {
   state: State;
   action: {
-    getPokemons(url: string, name?: string): void;
+    getPokemons(url: string, type?: string, name?: string): void;
     addToCart(clickedItem: Pokemon): void;
     RemoveFromCart(url: string): void;
     setCartItemsOnLocalStorage(cartItems: Pokemon[]): void;
@@ -27,7 +28,7 @@ interface IContext {
   };
 }
 
-export const URL_API = "https://pokeapi.co/api/v2/pokemon/";
+export const URL_API = "https://pokeapi.co/api/v2/";
 
 export const PokemonStoreContext = React.createContext({} as IContext);
 
@@ -39,19 +40,29 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
       pokemonList: [] as Pokemon[],
       cartItems: [] as Pokemon[],
       cartOpen: false,
-      nextPage: "",
       theme: this.getThemeFromLocalStorage(),
+      type: "water",
+      isLoading: false,
     };
   }
 
-  getPokemons = async (url: string = URL_API, name?: string) => {
+  getPokemons = async (
+    url: string = URL_API,
+    type: string = "water",
+    name?: string
+  ) => {
+    this.setState({ isLoading: true });
+
     let data: Pokemon[];
     try {
-      const response = await axios.get(name ? url + name : url);
-      console.log(response);
+      const response = await axios.get(
+        name ? `${url}pokemon/${name}` : `${url}type/${type}`
+      );
+      // console.log(response);
 
       if (!name) {
-        data = response.data.results.map((item: Pokemon) => {
+        data = response.data.pokemon.map((item: Pokemon) => {
+          item = item.pokemon;
           item.image = this.getImage(item.url);
           item.price = Number((Math.random() * 100).toFixed(2));
 
@@ -70,8 +81,8 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
 
       this.setState({
         ...this.state,
-        pokemonList: !name ? [...this.state.pokemonList, ...data] : data,
-        nextPage: response.data.next ? response.data.next : this.state.nextPage,
+        pokemonList: data,
+        isLoading: false,
       });
     } catch (error) {
       console.error(error);
@@ -132,7 +143,11 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
 
   setThemeOnLocalStorage = (theme: DefaultTheme) => {
     localStorage.setItem("currentTheme", JSON.stringify(theme));
-    this.setState({ theme });
+    this.setState({
+      theme,
+    });
+
+    this.getPokemons(URL_API, theme.title === "blue" ? "water" : "fire");
   };
 
   getThemeFromLocalStorage = (): DefaultTheme => {
@@ -164,7 +179,10 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
   };
 
   componentDidMount() {
-    this.getPokemons(URL_API);
+    this.getPokemons(
+      URL_API,
+      this.state.theme.title === "blue" ? "water" : "fire"
+    );
     this.getCartItemsFromLocalStorage();
   }
 

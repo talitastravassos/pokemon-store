@@ -1,6 +1,7 @@
 import Badge from "@material-ui/core/Badge";
 import { grey } from "@material-ui/core/colors";
 import IconButton from "@material-ui/core/IconButton";
+import { Opacity, Whatshot } from "@material-ui/icons";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { shade } from "polished";
 import React, { useContext } from "react";
@@ -31,20 +32,24 @@ export const Header: React.FC<Props> = ({
       Pokémon Store
       <Search />
       <div>
+        <div className="switch">
+          <Opacity />
+          <Switch
+            onChange={toggleTheme}
+            checked={title === "red"}
+            height={20}
+            width={50}
+            handleDiameter={25}
+            onColor={colors.secundary}
+            offColor={shade(0.2, colors.primary)}
+          />
+          <Whatshot />
+        </div>
         <IconButton onClick={() => setCartOpen(true)}>
           <Badge badgeContent={getTotalItems(cartItems)} color="error">
             <AddShoppingCartIcon style={{ color: grey[300] }} />
           </Badge>
         </IconButton>
-        <Switch
-          onChange={toggleTheme}
-          checked={title === "red"}
-          height={20}
-          width={50}
-          handleDiameter={25}
-          onColor={colors.secundary}
-          offColor={shade(0.2, colors.primary)}
-        />
       </div>
     </Container>
   );

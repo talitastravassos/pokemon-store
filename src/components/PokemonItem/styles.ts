@@ -6,7 +6,8 @@ export const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   border: 1px solid ${(props) => props.theme.colors.primary};
-  border-radius: 20px;
+  border-radius: 0.5rem;
+
   button {
     border-radius: 0 0 20px 20px;
     span {
@@ -22,7 +23,6 @@ export const Wrapper = styled.div`
     border-radius: 20px 20px 0 0;
   }
   div {
-    font-family: Arial, Helvetica, sans-serif;
     padding: 1rem;
     height: 100%;
   }

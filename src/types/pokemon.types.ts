@@ -4,4 +4,5 @@ export interface Pokemon {
   amount: number;
   price: number;
   image: string;
+  pokemon: Pokemon;
 }

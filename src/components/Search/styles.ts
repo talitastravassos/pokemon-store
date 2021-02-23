@@ -8,6 +8,10 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: space-around;
 
+  @media (max-width: 700px) {
+    order: 5;
+  }
+
   /* margin-top: 1rem; */
 `;
 
@@ -24,8 +28,13 @@ export const Input = styled.input`
   font-weight: 300;
   text-align: center;
   background: #fafafa;
+
+  @media (max-width: 700px) {
+    width: 10rem;
+  }
 `;
 
 export const SearchButton = styled(Button)`
   margin-left: 1rem !important;
+  background: #fafafa !important;
 `;

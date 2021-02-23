@@ -9,6 +9,11 @@ export const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 700px) {
+    height: 6.5rem;
+  }
 
   div {
     display: flex;
