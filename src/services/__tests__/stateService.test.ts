@@ -114,9 +114,10 @@ describe("getRequestPokemon", () => {
     //@ts-ignore
     axios.get.mockImplementationOnce(() => Promise.resolve(data));
 
-    const getPokemon = getRequestPokemon(URL_API, "fire").then((response) => {
-      expect(getPokemon).not.toBeNull();
-      expect(getPokemon).toStrictEqual([
+    // eslint-disable-next-line jest/valid-expect-in-promise
+    getRequestPokemon(URL_API, "fire").then((response) => {
+      expect(response).not.toBeNull();
+      expect(response).toStrictEqual([
         {
           name: "charizard",
           url: "https://pokeapi.co/api/v2/pokemon/6/",
