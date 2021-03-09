@@ -1,17 +1,14 @@
-import axios from "axios";
 import React from "react";
 import { DefaultTheme } from "styled-components";
 import { modalNotification } from "../services/notifications";
+import {
+  getRequestPokemon,
+  removeFromCart,
+  updateCart,
+} from "../services/stateService";
 import blue from "../styles/themes/blue";
 import { Pokemon } from "../types/pokemon.types";
-interface State {
-  pokemonList: Pokemon[];
-  cartItems: Pokemon[];
-  cartOpen: boolean;
-  theme: DefaultTheme;
-  type: string;
-  isLoading: boolean;
-}
+import { State } from "../types/state.types";
 
 interface IContext {
   state: State;
@@ -53,35 +50,10 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
   ) => {
     this.setState({ isLoading: true });
 
-    let data: Pokemon[];
     try {
-      const response = await axios.get(
-        name ? `${url}pokemon/${name}` : `${url}type/${type}`
-      );
-      // console.log(response);
-
-      if (!name) {
-        data = response.data.pokemon.map((item: Pokemon) => {
-          item = item.pokemon;
-          item.image = this.getImage(item.url);
-          item.price = Number((Math.random() * 100).toFixed(2));
-
-          return item;
-        });
-      } else {
-        data = [
-          {
-            name: response.data.name,
-            url: url + name,
-            image: this.getImage(URL_API + response.data.id + "/"),
-            price: Number((Math.random() * 100).toFixed(2)),
-          },
-        ] as Pokemon[];
-      }
-
       this.setState({
         ...this.state,
-        pokemonList: data,
+        pokemonList: await getRequestPokemon(url, type, name),
         isLoading: false,
       });
     } catch (error) {
@@ -90,43 +62,11 @@ export default class PokemonStoreProvider extends React.Component<{}, State> {
   };
 
   addToCart = (clickedItem: Pokemon) => {
-    this.setState((state) => {
-      const isItemInCart = state.cartItems.find(
-        (item) => item.url === clickedItem.url
-      );
-
-      if (isItemInCart) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map((item) =>
-            item.url === clickedItem.url
-              ? { ...item, amount: item.amount + 1 }
-              : item
-          ),
-        };
-      }
-
-      return {
-        ...state,
-        cartItems: [...state.cartItems, { ...clickedItem, amount: 1 }],
-      };
-    });
+    this.setState((state) => updateCart(state, clickedItem));
   };
 
   RemoveFromCart = (url: string) => {
-    this.setState((state) => {
-      return {
-        ...state,
-        cartItems: state.cartItems.reduce((ack, item) => {
-          if (item.url === url) {
-            if (item.amount === 1) return ack;
-            return [...ack, { ...item, amount: item.amount - 1 }];
-          } else {
-            return [...ack, item];
-          }
-        }, [] as Pokemon[]),
-      };
-    });
+    this.setState((state) => removeFromCart(state, url));
   };
 
   setCartItemsOnLocalStorage = (cartItems: Pokemon[]) => {

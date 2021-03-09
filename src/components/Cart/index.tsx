@@ -20,6 +20,8 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
   const calculateTotal = (items: Pokemon[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
+  console.log(cartItems);
+
   return (
     <Wrapper>
       <h2>Seu carrinho</h2>
